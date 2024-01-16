@@ -1,0 +1,46 @@
+{% extends "network/layout.html" %}
+
+{% load static %}
+{% load widget_tweaks %}
+
+{% block body %}
+
+<!-- Displaying each post-->
+{% for post in page_obj %}
+    <div id="{{post.id}}" class="container-fluid border p-3 m-0">
+        <p>{{ post.text_content }}</p>
+        <a href="{% url 'profile_page' post.user.id %}">
+            <p>{{ post.user.username }}</p>
+        <a>
+            
+        <p>{{ post.date }}</p>
+        <p class="like">Likes: {{ post.likes }}</p>
+    </div>
+{% endfor %}
+
+<!-- Pagination limited to 10 -->
+<div class="pagination">
+    <span class="step-links container-fluid">
+        {% if page_obj.has_previous %}
+            <a href="?page=1" class="ml-1 mr-1">&laquo; first</a>
+            <a href="?page={{ page_obj.previous_page_number }}"  class="ml-1 mr-1">previous</a>
+        {% endif %}
+
+        <span class="current  ml-1 mr-1">
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+        </span>
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}"  class="ml-1 mr-1">next</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}"  class="ml-1 mr-1">last &raquo;</a>
+        {% endif %}
+    </span>
+</div>
+
+<script src="{% static 'like.js' %}"></script>
+
+
+{% endblock %}
+
+
+

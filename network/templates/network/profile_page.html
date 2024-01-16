@@ -1,0 +1,64 @@
+{% extends "network/layout.html" %}
+
+{% load widget_tweaks %}
+
+{% load static %}
+
+{% block body %}
+
+<p>{{ profile_user.username }}</p>
+<p> Followers: {{ followers }} </p>
+<p> Follows: {{ follows }} </p>
+
+{% if user.is_authenticated %}
+    <!-- Unfollow button -->
+    {% if test == "True"%}
+        <a href="{% url 'unfollow' profile_user.id %}"><button class="btn-primary">Unfollow</button></a> 
+    <!-- Follow button -->
+    {% elif test == "False"%}
+    <a href="{% url 'follow' profile_user.id %}"><button class="btn-primary">Follow</button></a> 
+    {% endif %}
+{% endif %}
+
+
+{% for post in page_obj %}
+    <div id="{{post.id}}"  class="container-fluid border p-3 m-0">
+        <span>{{ post.text_content }}</span>
+        <a href="{% url 'profile_page' post.user.id %}"><p>{{ post.user.username }}</p><a>
+        <p>{{ post.date }}</p>
+        <p>{{ post.likes }}</p>
+
+        <!-- If user is visiting his own profile add a edit post button -->
+        {% if test == "" %}
+            <button class="btn-primary">Edit Post</button>
+        {% endif %}
+    </div>
+       
+{% endfor %}
+
+<div class="pagination">
+    <span class="step-links container-fluid">
+        {% if page_obj.has_previous %}
+            <a href="?page=1" class="ml-1 mr-1">&laquo; first</a>
+            <a href="?page={{ page_obj.previous_page_number }}"  class="ml-1 mr-1">previous</a>
+        {% endif %}
+
+        <span class="current  ml-1 mr-1">
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+        </span>
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}"  class="ml-1 mr-1">next</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}"  class="ml-1 mr-1">last &raquo;</a>
+        {% endif %}
+    </span>
+</div>
+{% if user.is_authenticated %}
+    {% if test == "" %}
+        <script src="{% static 'script.js' %}"></script>
+    {% endif %}
+{% endif %}
+
+
+
+{% endblock %}

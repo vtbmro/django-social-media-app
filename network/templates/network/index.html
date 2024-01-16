@@ -1,0 +1,18 @@
+{% extends "network/layout.html" %}
+
+{% load widget_tweaks %}
+
+{% block body %}
+    {% if user.is_authenticated %}
+        <form class="m-0 p-3" method="post" action="{% url 'index' %}">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="description" class="h5">Descrition</label>
+                {% render_field form.text_content class+="form-control" placeholder="Make a new post..."%}
+            </div>
+
+            <input type="submit" value="Post" class="btn btn-primary">
+        </form>
+    {% endif %}
+
+{% endblock %}
